@@ -9,10 +9,10 @@ class Login {
 				forgotLink: $("forgotLink"),
 			}
 		}
-		this.bindUIActions_();
+		this.bindUiActions_();
 	}
 
-	bindUIActions_() {
+	bindUiActions_() {
 		Login.uiElements.submitButton.on("click", this.handleLoginSubmit_);
 		Login.uiElements.forgotLink.on("click", this.forgotPassword_)
 	}
