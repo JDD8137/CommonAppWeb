@@ -23,13 +23,18 @@ class ApplicationReview {
 	}
 
 	bindUiActions() {
-		
+		$("#admissionStatusSelect").on("change", (applicationId) => {
+			let newStatus = $("#admissionStatusSelect").val();
+			WebDatabase.getAllApplications().then((applications) => {
+				applications.forEach((application) => {
+					WebDatabase.updateApplicationField(application.id, "admissionsDecision", newStatus);
+				});
+			});
+		});
 	}
 
 	renderApplicationReview_(container) {
-
 		$.get("components/templates/ApplicationReview.html", (template) => {
-			
 			let applicationsPromise = WebDatabase.getAllApplications();
 			let applicantsPromise = WebDatabase.getAllUsers();
 			let universitiesPromise = WebDatabase.getAllUniversities();
@@ -53,6 +58,7 @@ class ApplicationReview {
 				Mustache.parse(template);
 				let rendered = Mustache.render(template, {applications: applications});
 				container.html(rendered);
+				this.bindUiActions();
 				console.log(rendered);
 			});
 		}, "html");

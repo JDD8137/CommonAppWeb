@@ -1,5 +1,13 @@
 class WebDatabase {
 
+	static updateApplicationField(applicationId, field, value) {
+		const database = firebase.database();
+		const ref = database.ref("applications/" + applicationId);
+		let updateObject = {};
+		updateObject[field] = value;
+		ref.update(updateObject);
+	}
+
 	static getUserData() {
 		return new Promise((resolve, reject) => {
 			const database = firebase.database();
