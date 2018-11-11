@@ -1,0 +1,29 @@
+<div>
+	<table id="bootstrap-table" class="table">
+		<thead>
+			<th data-field="name">Name</th>
+			<th data-field="University">University</th>
+			<th data-field="firstDegreeChoice">Major 1</th>
+			<th data-field="secondDegreeChoice">Major 2</th>
+			<th data-field="admissionsDecision">Decision</th>
+		</thead>
+		<tbody>
+			{{#applications}}
+				<tr applicationId="{{id}}">
+					<td>{{name}}</td>
+					<td>{{uni}}</td>
+					<td>{{firstDegreeChoice}}</td>
+					<td>{{secondDegreeChoice}}</td>
+					<td>{{admissionDecision}}
+						<select id="admissionStatusSelect">
+							<option value="review">In Review</option>
+							<option value="admitted">Admitted</option>
+							<option value="rejected">Rejected</option>
+							<option value="moreInfo">Need more information</option>
+						</select>
+					</td>
+				</tr>
+			{{/applications}}
+		</tbody>	
+	</table>
+</div>

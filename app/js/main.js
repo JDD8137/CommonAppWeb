@@ -2,20 +2,42 @@ class CommonApp {
     
     constructor() {
         this.bindUiActions_()
+        this.components = {
+            ApplicationReview: ApplicationReview.getInstance(),   
+        }
+        this.container = $("#contentContainer")
+        this.activeComponent = {};
+
+        this.init();
     }
 
     bindUiActions_() {
         // Log out Button
         $("#logout").on("click", () => {
-            this.redirectToLogin();
+            this.redirectToLogin_();
         });
     }
 
+    renderComponent_(component) {
+        if (!!this.activeComponent.navItem) {
+            this.activeComponent.navItem.removeClass("active");
+            this.activeComponent.isActive = false;
+        }
+        this.activeComponent = component;
+        component.navItem.addClass("active");
+        this.container.html("");
+
+        $("#pageTitle").html(component.title)
+        component.getInstance().init(this.container);
+    }
+
     init() {
+        //this.registerAuthStateListener();
+        this.renderComponent_(ApplicationReview)
 
     }
 
-    redirectToLogin() {
+    redirectToLogin_() {
         window.location.href = "login.html"
     }
 
@@ -29,5 +51,4 @@ class CommonApp {
         });
     }
 }
-// TODO(danielms): make static
 commonApp = new CommonApp();
