@@ -8180,11 +8180,11 @@ star {
   text-align: center;
 }
 .card-login .card-header .card-title {
-  color: #ff0000;
+  color: #66615b;
   margin-bottom: 20px;
 }
 .card-login label {
-  color: #ff0000;
+  color: #66615b;
 }
 .card-login .btn-wd {
   min-width: 180px;
@@ -8207,7 +8207,7 @@ star {
   top: 20px;
 }
 .card-product .details .actions h5 {
-  color: #ff0000;
+  color: #484541;
 }
 
 .card-user .footer,
