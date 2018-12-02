@@ -1,5 +1,5 @@
 class ApplicationReview {
-	
+
 	constructor() {
 		ApplicationReview.componentName = "ApplicationReview";
 		ApplicationReview.title = "Application Review";
@@ -65,4 +65,4 @@ class ApplicationReview {
 
 	}
 }
-ApplicationReview.getInstance(); 
+let applicationReview = ApplicationReview.getInstance();

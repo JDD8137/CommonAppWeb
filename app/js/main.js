@@ -1,10 +1,11 @@
 class CommonApp {
     
     constructor() {
-        this.bindUiActions_()
         this.components = {
-            ApplicationReview: ApplicationReview.getInstance(),   
+            ApplicationView: ApplicationView.getInstance(),   
+            ApplicationReview: ApplicationReview.getInstance(),
         }
+        this.bindUiActions_();
         this.container = $("#contentContainer")
         this.activeComponent = {};
 
@@ -16,6 +17,8 @@ class CommonApp {
         $("#logout").on("click", () => {
             this.redirectToLogin_();
         });
+        $("#applicationReview").on("click", () => {this.renderComponent_(ApplicationReview)});
+        $("#applicationView").on("click", () => {this.renderComponent_(ApplicationView)});
     }
 
     renderComponent_(component) {
@@ -33,8 +36,7 @@ class CommonApp {
 
     init() {
         //this.registerAuthStateListener();
-        this.renderComponent_(ApplicationReview)
-
+        this.renderComponent_(ApplicationReview);
     }
 
     redirectToLogin_() {
