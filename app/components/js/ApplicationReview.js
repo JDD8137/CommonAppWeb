@@ -1,5 +1,5 @@
 class ApplicationReview {
-	
+
 	constructor() {
 		ApplicationReview.componentName = "ApplicationReview";
 		ApplicationReview.title = "Application Review";
@@ -31,6 +31,10 @@ class ApplicationReview {
 				});
 			});
 		});
+	}
+
+	onClickRow(row, element, field) {
+
 	}
 
 	renderApplicationReview_(container) {
@@ -65,4 +69,4 @@ class ApplicationReview {
 
 	}
 }
-ApplicationReview.getInstance(); 
+let applicationReview = ApplicationReview.getInstance();

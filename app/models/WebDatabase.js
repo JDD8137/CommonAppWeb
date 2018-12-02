@@ -56,6 +56,19 @@ class WebDatabase {
 		});
 	}
 
+	static getApplicationByApplicationId(applicationId) {
+		return new Promise((resolve, reject) => {
+			const database = firebase.database();
+			const ref = database.ref("applications/" + applicationId);
+			ref.once("value").then((snapshot) => {
+				let application = snapshot.val();
+				resolve(application);
+			}).catch((error) => {
+				reject(error)
+			});
+		});
+	}
+
 	static getAllUsers() {
 		return new Promise((resolve, reject) => {
 			const database = firebase.database();
