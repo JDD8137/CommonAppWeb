@@ -33,10 +33,6 @@ class ApplicationReview {
 		});
 	}
 
-	onClickRow(row, element, field) {
-
-	}
-
 	renderApplicationReview_(container) {
 		$.get("components/templates/ApplicationReview.html", (template) => {
 			let applicationsPromise = WebDatabase.getAllApplications();

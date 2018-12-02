@@ -31,6 +31,7 @@ class ApplicationView {
   }
 
   renderApplicationView(container) {
+    this.container = container;
     $.get("components/templates/ApplicationView.html", (template) => {
       ApplicationView.viewTemplate = template;
       container.html(template);
@@ -41,7 +42,7 @@ class ApplicationView {
   populateApplicationPicker() {
     let applicantId = this.applicantId;
     const select = $("#applicationViewSelect");
-    
+
     let usersPromise = WebDatabase.getAllUsers();
     let applicationsPromise = WebDatabase.getAllApplications();
 
@@ -62,6 +63,7 @@ class ApplicationView {
               let nameText = user.firstName + " " + user.lastName;
               application.name = nameText;
               opt.value = nameText;
+              opt.setAttribute("data-id", application.id)
               opt.innerHTML = nameText;
               select.append(opt);
             }
@@ -75,9 +77,16 @@ class ApplicationView {
 
 
   handleSelection() {
-    let applicationId = $("#applicationViewSelect").val();
-    let application = WebDatabase.getApplicationByApplicationId(applicationId);
-    this.renderApplicationDetails(application);
+    let applicationId = $("#applicationViewSelect").find(":selected").attr("data-id");
+    WebDatabase.getApplicationByApplicationId(applicationId).then((application) => {
+      $.get("components/templates/ApplicationData.html", (template) => {
+        Mustache.parse(template);
+        let rendered = Mustache.render(template, {application: application});
+        console.log(rendered);
+        $(".applicationData").empty();
+        $(".applicationData").append(rendered);
+      }, "html");
+    });
   }
 
   renderApplicationDetails(application) {
@@ -85,7 +94,7 @@ class ApplicationView {
       Mustache.parse(template);
       let rendered = Mustache.render(template, {application: application})
     }, "html");
+    this.container.html(rendered);
   }
 }
 let applicationView = ApplicationView.getInstance();
-
