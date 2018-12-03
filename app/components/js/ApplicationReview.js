@@ -25,11 +25,8 @@ class ApplicationReview {
 	bindUiActions() {
 		$("#admissionStatusSelect").on("change", (applicationId) => {
 			let newStatus = $("#admissionStatusSelect").val();
-			WebDatabase.getAllApplications().then((applications) => {
-				applications.forEach((application) => {
-					WebDatabase.updateApplicationField(application.id, "admissionsDecision", newStatus);
-				});
-			});
+			let id = $("#admissionStatusSelect").attr("submissionId");
+			WebDatabase.updateApplicationField(id, "admissionsDecision", newStatus);
 		});
 	}
 
@@ -38,28 +35,44 @@ class ApplicationReview {
 			let applicationsPromise = WebDatabase.getAllApplications();
 			let applicantsPromise = WebDatabase.getAllUsers();
 			let universitiesPromise = WebDatabase.getAllUniversities();
+			let submissionsPromise = WebDatabase.getUniversitySubmissions();
 
-			Promise.all([applicationsPromise, applicantsPromise, universitiesPromise]).then((results) => {
+			Promise.all([applicationsPromise, applicantsPromise, universitiesPromise, submissionsPromise]).then((results) => {
 				let applications = results[0]
 				let users = results[1]
 				let universities = results[2]
-				applications.forEach((application) => {
+				let submissions = results[3]
+
+				let toDisplay = [];
+				submissions.forEach((submission) => {
+					let application = applications.filter(a => {
+						return a.applicantId == submission.applicationId
+					})[0];
+					let id = submission.id;
+					var newSubmission = {...submission, ...application}
+					newSubmission.id = id;
 					users.forEach((user) => {
-						if (application.applicantId == user.id) {
-							application.name = user.firstName + " " + user.lastName;
+						if (newSubmission.applicantId == user.id) {
+							newSubmission.name = user.firstName + " " + user.lastName;
 						}
 					});
 					universities.forEach((uni) => {
-						if (application.universityId == uni.id) {
-							application.uni = uni.name;
+						if (newSubmission.universityId == uni.id) {
+							newSubmission.uni = uni.name;
 						}
 					});
+					toDisplay.push(newSubmission);
 				});
 				Mustache.parse(template);
-				let rendered = Mustache.render(template, {applications: applications});
+				let rendered = Mustache.render(template, {applications: toDisplay});
 				container.html(rendered);
 				this.bindUiActions();
 				console.log(rendered);
+
+				toDisplay.forEach((submission) => {
+					let id = submission.id; 
+					$(`select[submissionId='${id}']`).val(submission.admissionsDecision);
+				})
 			});
 		}, "html");
 

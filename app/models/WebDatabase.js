@@ -2,7 +2,7 @@ class WebDatabase {
 
 	static updateApplicationField(applicationId, field, value) {
 		const database = firebase.database();
-		const ref = database.ref("applications/" + applicationId);
+		const ref = database.ref("universitySubmissions/" + applicationId);
 		let updateObject = {};
 		updateObject[field] = value;
 		ref.update(updateObject);
@@ -43,6 +43,24 @@ class WebDatabase {
 		});
 	}
 
+	static getUniversitySubmissions() {
+		return new Promise((resolve, reject) => {
+			const database = firebase.database();
+			const ref = database.ref("/universitySubmissions")
+			ref.once("value").then((snapshot) => {
+				let submissions = [];
+				snapshot.forEach((childSnapshot) => {
+					let submission = childSnapshot.val();
+					submission.id = childSnapshot.key;
+					submissions.push(submission);
+				});
+				resolve(submissions);
+			}).catch((error) => {
+				reject(error);
+			})
+		})
+	}
+
 	static getApplicantByApplicantId(userId) {
 		return new Promise((resolve, reject) => {
 			const database = firebase.database();
@@ -67,6 +85,26 @@ class WebDatabase {
 				reject(error)
 			});
 		});
+	}
+
+	static getSubmissionById(submissionId) {
+		return new Promise((resolve, reject) => {
+			const database = firebase.database();
+			const ref = database.ref("universitySubmissions/" + submissionId);
+			ref.once("value").then((snapshot) => {
+				let submission = snapshot.val();
+				let applicationId = submission.applicationId;
+				let appRef = database.ref("applications/");
+				appRef.orderByChild("applicantId").equalTo(applicationId).on("value", (snapshot) => {
+					let application = snapshot.val();
+					let application = application[Object.keys(application)[0]];
+					let id = submission.id;
+					let toReturn = {...application, ...submission}
+					toReturn.id = id;
+					resolve(toReturn)
+				})
+			})
+		})
 	}
 
 	static getAllUsers() {

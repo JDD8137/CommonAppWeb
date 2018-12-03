@@ -15,7 +15,8 @@
 					<td>{{firstDegreeChoice}}</td>
 					<td>{{secondDegreeChoice}}</td>
 					<td>{{admissionDecision}}
-						<select id="admissionStatusSelect">
+						<select id="admissionStatusSelect" submissionId="{{id}}">
+							<option value="Payment Pending">Pending Pending</option>
 							<option value="In Review">In Review</option>
 							<option value="Admitted">Admitted</option>
 							<option value="Rejected">Rejected</option>
